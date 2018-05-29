@@ -6,8 +6,9 @@ Basic API for creating and retrieve shuffled deck of cards. Card Shuffler uses M
 
 ``` bash
 # Create new shuffled deck. Returns shuffled deck with DB ids
-POST /api/deck
+POST /api/shuffleddeck
 
 # Returns ordered deck associated to the given deck ID
-GET /api/deck/{id}
+GET /api/decks
+Payload: { "deckId" : "" }
 ```
