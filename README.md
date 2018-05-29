@@ -1,7 +1,14 @@
-# minimal-express-mongoose-babel
+# Card Shuffler
 
-I wrote an article on Medium about this repo, with a walkthrough: https://medium.com/@__haqq/my-minimal-express-backend-with-babel-setup-cf45df8b9d82
+Basic API for creating and retrieve shuffled deck of cards. Card Shuffler uses MongoDB to store created decks.
 
 ## How to use
 
-Clone repo and npm/yarn install.
+``` bash
+# Create new shuffled deck. Returns shuffled deck with DB ids
+POST /api/shuffleddeck
+
+# Returns ordered deck associated to the given deck ID
+GET /api/decks
+Payload: { "deckId" : "" }
+```
