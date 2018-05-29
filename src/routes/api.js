@@ -16,38 +16,47 @@ mongoose.connect(`mongodb://localhost:27017/decks`, { useMongoClient: true }).th
 );
 
 // get a list of poll from the db
-router.get("/deck", (req, res) => {
-  res.send("TEST");
+router.get("/deck/:id", (req, res) => {
+  Deck.findById(req.params.id, (err, deck) => {
+    if(err){
+      res.send(err);
+    }
+    else{
+      res.send(deck);
+    }
+  });
 });
 
-// add a new deck to the db
+// POST endpoint to create new shuffled deck and save it to the database
+// Returns shuffled deck
 router.post("/deck", (req, res) => {
-  let newDeck = new Deck({
-    cards: [
-      {value: "Cole", suite: "ColeSuite"}
-    ]
-  });
 
-  newDeck.addCard("Cole3", "ColeSuite3");
-  // Save the deck to the db
-  newDeck.save((err) =>{
-    if(err)
-    {
-      res.json({
-        result: "failed",
-        data: {},
-        message: `Error message: ${err}`
-      });
-    }
-    else
-    {
-      res.json({
-        result:  "ok",
-        data: newDeck
-      });
-    }
-  });
+  const newDeck = new Deck();
+  
+  // Populate deck with cards
+  newDeck.populate();
 
+  // Shuffle cards in deck
+  newDeck.shuffle().then(() => {
+    // Save the deck to the db
+    newDeck.save((err) =>{
+      if(err)
+      {
+        res.json({
+          result: "failed",
+          data: {},
+          message: `Error message: ${err}`
+        });
+      }
+      else
+      {
+        res.json({
+          result:  "ok",
+          data: newDeck
+        });
+      }
+    });
+  });
 });
 
 module.exports = router;

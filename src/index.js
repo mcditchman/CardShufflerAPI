@@ -1,13 +1,9 @@
 import express from "express";
-import bodyParser from "body-parser";
 import mongoose from "mongoose";
+import bodyParser from "body-parser";
 
 // set up express app
 const app = express();
-
-// connect MongoDB
-mongoose.connect(`mongodb://localhost/polls`, { useMongoClient: true });
-mongoose.Promise = global.Promise;
 
 // use body-parser middleware
 app.use(bodyParser.json());
