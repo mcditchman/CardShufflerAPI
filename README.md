@@ -1,6 +1,6 @@
 # Card Shuffler
 
-Basic API for creating and retrieve shuffled deck of cards. Card Shuffler user MongoDB to store created decks.
+Basic API for creating and retrieve shuffled deck of cards. Card Shuffler uses MongoDB to store created decks.
 
 ## How to use
 
