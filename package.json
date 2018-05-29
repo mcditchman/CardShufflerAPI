@@ -6,9 +6,9 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"clean": "rimraf dist/",
-		"build": "npm run clean && babel src -d dist",
+		"build": "SET NODE_ENV=prod npm run clean && babel src -d dist",
 		"start": "npm run build && babel-node dist/index.js",
-		"dev": "nodemon src/index.js --exec babel-node"
+		"dev": "SET NODE_ENV=dev && nodemon src/index.js --exec babel-node"
 	},
 	"keywords": [
 		"boilerplate",

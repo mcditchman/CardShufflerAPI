@@ -8,28 +8,36 @@ const router = express.Router();
 mongoose.Promise = global.Promise;
 mongoose.connect(`mongodb://localhost:27017/decks`, { useMongoClient: true }).then(
   () => {
-    console.log("Connection success!");
+    console.log("Database connection success!");
   },
-  err =>{
-    console.log("Connection Failed");
+  err => {
+    console.log("Database connection Failed");
   }
 );
 
-// get a list of poll from the db
-router.get("/deck/:id", (req, res) => {
-  Deck.findById(req.params.id, (err, deck) => {
-    if(err){
-      res.send(err);
-    }
-    else{
-      res.send(deck);
-    }
-  });
+// POST to retrieve a deck from the DB using a given deck ID
+router.post("/decks", (req, res, next) => {
+  if(req.body.deckId){
+    Deck.findOne({_id: req.body.deckId}, (err, deck) => {
+      if(err){ next(err); }
+      else if(!deck){
+        res.status(404).send('No deck found for id!');
+      }
+      else{
+        // Sort the deck by value before sending back
+        deck.sort();
+        res.send(deck);
+      }
+    });
+  }
+  else{
+    res.status(400).send('Deck ID is required!');
+  }
 });
 
 // POST endpoint to create new shuffled deck and save it to the database
 // Returns shuffled deck
-router.post("/deck", (req, res) => {
+router.post("/shuffleddeck", (req, res, next) => {
 
   const newDeck = new Deck();
   
@@ -37,25 +45,26 @@ router.post("/deck", (req, res) => {
   newDeck.populate();
 
   // Shuffle cards in deck
-  newDeck.shuffle().then(() => {
-    // Save the deck to the db
-    newDeck.save((err) =>{
-      if(err)
-      {
-        res.json({
-          result: "failed",
-          data: {},
-          message: `Error message: ${err}`
-        });
-      }
-      else
-      {
-        res.json({
-          result:  "ok",
-          data: newDeck
-        });
-      }
-    });
+  newDeck.shuffle()
+    .then(() => {
+      // Save the deck to the db
+      newDeck.save((err) =>{
+        if(err)
+        {
+          res.json({
+            result: "failed",
+            data: {},
+            message: `Error message: ${err}`
+          });
+        }
+        else
+        {
+          res.json({
+            result:  "ok",
+            data: newDeck
+          });
+        }
+      });
   });
 });
 
