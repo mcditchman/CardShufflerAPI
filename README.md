@@ -9,6 +9,6 @@ Basic API for creating and retrieve shuffled deck of cards. Card Shuffler uses M
 POST /api/shuffleddeck
 
 # Returns ordered deck associated to the given deck ID
-GET /api/decks
+POST /api/decks
 Payload: { "deckId" : "" }
 ```
